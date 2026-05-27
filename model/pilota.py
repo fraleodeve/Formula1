@@ -1,0 +1,23 @@
+from dataclasses import dataclass
+from datetime import date
+
+@dataclass
+class Pilota:
+    driverId: int
+    driverRef: str
+    number: int
+    code: str
+    forename: str
+    surname: str
+    dob: date
+    nationality: str
+    url: str
+
+    def __hash__(self):
+        return hash(self.driverId)
+
+    def __eq__(self, other):
+        return self.driverId == other.driverId
+
+    def __str__(self):
+        return f"{self.driverRef} ({self.driverId}) - Date of birth: {self.dob}"
