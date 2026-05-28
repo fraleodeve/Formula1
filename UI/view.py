@@ -1,9 +1,9 @@
 import flet as ft
 
-
 class View(ft.UserControl):
     def __init__(self, page: ft.Page):
         super().__init__()
+
         # page stuff
         self._page = page
         self._page.title = "Esame del 15/09/2025"
@@ -12,12 +12,19 @@ class View(ft.UserControl):
         self._page.bgcolor = "#ebf4f4"
         self._page.window_height = 800
         page.window_center()
+
         # controller (it is not initialized. Must be initialized in the main, after the controller is created)
         self._controller = None
+
         # graphical elements
         self._title = None
-        self._txt_name = None
-        self._txt_result = None
+        self._ddAnno1 = None
+        self._ddAnno2 = None
+        self._btnCreaGrafo = None
+        self._btnstampa = None
+        self._txtInK = None
+        self._btnCerca = None
+        self.txt_result = None
 
     def load_interface(self):
         # title
@@ -28,7 +35,6 @@ class View(ft.UserControl):
         self._ddAnno2 = ft.Dropdown(label="A", hint_text="Anno")
         self._controller.fillDDYear()
         self._btnCreaGrafo = ft.ElevatedButton(text="Crea Grafo", on_click=self._controller.handleCreaGrafo)
-
 
         cont1 = ft.Container(self._ddAnno1, width=250)
         cont2 = ft.Container(self._ddAnno2, width=250)
@@ -49,6 +55,7 @@ class View(ft.UserControl):
         self._page.controls.append(row1)
         self._page.controls.append(row2)
         self._page.controls.append(row3)
+
         self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
         self._page.controls.append(self.txt_result)
         self._page.update()

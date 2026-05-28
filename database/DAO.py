@@ -2,9 +2,7 @@ from database.DB_connect import DBConnect
 from model.arco import Arco
 from model.pilota import Pilota
 
-
 class DAO():
-
     @staticmethod
     def getAllYears():
         conn = DBConnect.get_connection()

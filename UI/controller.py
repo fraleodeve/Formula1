@@ -1,13 +1,11 @@
 import flet as ft
 
-
 class Controller:
     def __init__(self, view, model):
         # the view, with the graphical elements of the UI
         self._view = view
         # the model, which implements the logic of the program and holds the data
         self._model = model
-
 
     def handleCreaGrafo(self,e):
         self._model.buildGraph(self._view._ddAnno1.value, self._view._ddAnno2.value)
@@ -37,7 +35,35 @@ class Controller:
         self._view.update_page()
 
     def handleCerca(self, e):
-        pass
+        k = self._view._txtInK.value # qui dovremmo fare i soliti controlli sulla validità di k prima di procedere
+        kInt = int(k)
+
+        listPilotiOttima, minDistEta = self._model.getListaPilotiOttima(kInt)
+
+        if listPilotiOttima is None: # non possiamo trovare soluzioni
+            self._view.txt_result.controls.clear()
+            self._view.txt_result.controls.append(ft.Text(f"Non ci sono abbastanza componenti connesse per trovare {k} "
+                                                          f"piloti che non siano stati compagni di squadra nel range selezionato."))
+            self._view.update_page()
+            return
+
+        self._view.txt_result.controls.clear()
+        self._view.txt_result.controls.append(
+            ft.Text(f"Lista di piloti con scarto di età minimo che non sono stati mai compagni di squadra nel range selezionato.", color="red"))
+
+        for p in listPilotiOttima:
+            self._view.txt_result.controls.append(ft.Text(p))
+
+        self._view.txt_result.controls.append(
+            ft.Text(f"Differenza di età fra pilota più giovane e quello più anziano: {minDistEta} giorni", color = "red"))
+
+        youngest = min(listPilotiOttima, key=lambda x: x.dob)
+        oldest = max(listPilotiOttima, key=lambda x: x.dob)
+
+        self._view.txt_result.controls.append(ft.Text(f"Pilota più anziano: {oldest}"))
+        self._view.txt_result.controls.append(ft.Text(f"Pilota più giovane: {youngest}"))
+
+        self._view.update_page()
 
     def fillDDYear(self):
         years = self._model.getAllYears()
